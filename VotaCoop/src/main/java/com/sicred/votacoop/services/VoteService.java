@@ -1,10 +1,9 @@
 package com.sicred.votacoop.services;
 
+import com.sicred.votacoop.dtos.VotingResultDTO;
 import com.sicred.votacoop.exceptions.BusinessException;
-import com.sicred.votacoop.models.Topic;
 import com.sicred.votacoop.models.Session;
 import com.sicred.votacoop.models.Vote;
-import com.sicred.votacoop.repositories.TopicRepository;
 import com.sicred.votacoop.repositories.SessionRepository;
 import com.sicred.votacoop.repositories.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VoteService {
@@ -54,8 +52,17 @@ public class VoteService {
     }
 
     // Get voting results for a session
-    public List<Vote> getSessionResults(Long sessionId) {
-        return voteRepository.findBySessionId(sessionId);
+    public VotingResultDTO getSessionResults(Long sessionId) {
+        List<Vote> votes = voteRepository.findBySessionId(sessionId);
+
+        Long totalVotes = (long) votes.size();
+        Long affirmativeVotes = votes.stream().filter(Vote::getVoteValue).count();
+        Long negativeVotes = totalVotes - affirmativeVotes;
+
+        String result = (affirmativeVotes > negativeVotes) ? "Passed" : "Failed";
+
+        return new VotingResultDTO(totalVotes, affirmativeVotes, negativeVotes, result);
     }
+
 
 }

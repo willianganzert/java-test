@@ -1,5 +1,6 @@
 package com.sicred.votacoop.controllers;
 
+import com.sicred.votacoop.dtos.VotingResultDTO;
 import com.sicred.votacoop.models.Vote;
 import com.sicred.votacoop.services.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class VoteController {
 
     // Get voting results for a session
     @GetMapping("/sessions/{sessionId}/results")
-    public ResponseEntity<List<Vote>> getSessionResults(@PathVariable Long sessionId) {
+    public ResponseEntity<VotingResultDTO> getSessionResults(@PathVariable Long sessionId) {
         return ResponseEntity.ok(voteService.getSessionResults(sessionId));
     }
 
