@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 
 @Entity
@@ -22,18 +21,19 @@ public class Session {
 
     @Column(nullable = false)
     @NotNull(message = "Start time is required.")
-    @FutureOrPresent(message = "Start time should be in the future or present.")
     private LocalDateTime startTime;
 
     @Column(name = "end_time", nullable = false)
     @NotNull(message = "End time is required.")
-    @FutureOrPresent(message = "End time should be in the future or present.")
     private LocalDateTime endTime;
 
     @Column(name = "duration", nullable = false)
     @NotNull(message = "Duration is required.")
     @Min(value = 60, message = "Duration should be at least 60 seconds.")
     private Integer duration;
+
+    @Column(name = "message_sent", nullable = false, columnDefinition = "boolean default false")
+    private Boolean messageSent = false;
 
     public Long getId() {
         return id;
@@ -73,5 +73,13 @@ public class Session {
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public Boolean getMessageSent() {
+        return messageSent;
+    }
+
+    public void setMessageSent(Boolean messageSent) {
+        this.messageSent = messageSent;
     }
 }
