@@ -1,0 +1,13 @@
+docker pull postgres
+
+docker run --name votacoop-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+
+
+
+CREATE DATABASE votacoop
+WITH
+    ENCODING 'UTF8'
+    LC_COLLATE = 'en_US.utf8'
+    LC_CTYPE = 'en_US.utf8'
+    TEMPLATE = template0
+    OWNER = postgres
