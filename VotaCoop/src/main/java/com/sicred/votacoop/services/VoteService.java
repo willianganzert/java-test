@@ -21,6 +21,9 @@ public class VoteService {
     @Autowired
     private VoteRepository voteRepository;
 
+    @Autowired
+    private UserIntegrationService userIntegrationService;
+
 
 
     // Vote in a session
@@ -39,6 +42,12 @@ public class VoteService {
         String cpf = vote.getMemberCpf();
         if (cpf == null || cpf.length() != 11) {
             throw new BusinessException("Invalid CPF details");
+        }
+
+        String votingStatus = userIntegrationService.getUserVotingStatus(vote.getMemberCpf());
+
+        if("UNABLE_TO_VOTE".equals(votingStatus)) {
+            throw new BusinessException("This member is unable to vote.");
         }
 
         boolean hasAlreadyVoted = voteRepository.findBySessionIdAndMemberCpf(sessionId, cpf).isPresent();
