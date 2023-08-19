@@ -2,6 +2,7 @@ package com.sicred.votacoop.services;
 
 import com.sicred.votacoop.dtos.VotingResultDTO;
 import com.sicred.votacoop.exceptions.BusinessException;
+import com.sicred.votacoop.exceptions.ResourceNotFoundException;
 import com.sicred.votacoop.models.Session;
 import com.sicred.votacoop.models.Vote;
 import com.sicred.votacoop.repositories.SessionRepository;
@@ -21,13 +22,16 @@ public class VoteService {
     @Autowired
     private VoteRepository voteRepository;
 
+    @Autowired
+    private UserIntegrationService userIntegrationService;
+
 
 
     // Vote in a session
     public void vote(Long sessionId, Vote vote) {
         // Ensure the session exists
         Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("Session not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Session not found"));
 
         // Check if the voting session is currently active
         LocalDateTime now = LocalDateTime.now();
@@ -39,6 +43,12 @@ public class VoteService {
         String cpf = vote.getMemberCpf();
         if (cpf == null || cpf.length() != 11) {
             throw new BusinessException("Invalid CPF details");
+        }
+
+        String votingStatus = userIntegrationService.getUserVotingStatus(vote.getMemberCpf());
+
+        if("UNABLE_TO_VOTE".equals(votingStatus)) {
+            throw new BusinessException("This member is unable to vote.");
         }
 
         boolean hasAlreadyVoted = voteRepository.findBySessionIdAndMemberCpf(sessionId, cpf).isPresent();

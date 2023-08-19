@@ -1,5 +1,6 @@
 package com.sicred.votacoop.services;
 
+import com.sicred.votacoop.exceptions.ResourceNotFoundException;
 import com.sicred.votacoop.models.Session;
 import com.sicred.votacoop.models.Topic;
 import com.sicred.votacoop.repositories.SessionRepository;
@@ -29,7 +30,7 @@ public class TopicService {
     public Session startSession(Long topicId, Optional<Integer> durationInSeconds) {
         // Ensure the topic exists
         Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new RuntimeException("Topic not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic not found"));
 
         Session session = new Session();
         session.setTopic(topic);
