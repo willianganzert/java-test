@@ -2,6 +2,7 @@ version: '3'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    container_name: votacoop-zookeeper
     networks:
       - broker-kafka
     environment:
@@ -10,6 +11,7 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:latest
+    container_name: votacoop-kafka
     networks:
       - broker-kafka
     depends_on:
@@ -26,6 +28,7 @@ services:
 
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
+    container_name: votacoop-kafdrop
     networks:
       - broker-kafka
     depends_on:
@@ -34,6 +37,20 @@ services:
       - 19000:9000
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
+
+  postgres:
+    build:
+      context: .
+      dockerfile: postgres.dockerfile
+    image: "postgres"
+    container_name: votacoop-postgres
+    environment:
+      POSTGRES_DB: votacoop
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
 
 networks:
   broker-kafka:
