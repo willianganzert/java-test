@@ -1,6 +1,7 @@
 package com.sicred.votacoop.controllers.advice;
 
 import com.sicred.votacoop.exceptions.BusinessException;
+import com.sicred.votacoop.exceptions.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -36,5 +37,10 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
 
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

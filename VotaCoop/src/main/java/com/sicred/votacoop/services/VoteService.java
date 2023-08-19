@@ -2,6 +2,7 @@ package com.sicred.votacoop.services;
 
 import com.sicred.votacoop.dtos.VotingResultDTO;
 import com.sicred.votacoop.exceptions.BusinessException;
+import com.sicred.votacoop.exceptions.ResourceNotFoundException;
 import com.sicred.votacoop.models.Session;
 import com.sicred.votacoop.models.Vote;
 import com.sicred.votacoop.repositories.SessionRepository;
@@ -30,7 +31,7 @@ public class VoteService {
     public void vote(Long sessionId, Vote vote) {
         // Ensure the session exists
         Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("Session not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Session not found"));
 
         // Check if the voting session is currently active
         LocalDateTime now = LocalDateTime.now();
