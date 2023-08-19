@@ -8,6 +8,8 @@ import com.sicred.votacoop.models.Vote;
 import com.sicred.votacoop.repositories.SessionRepository;
 import com.sicred.votacoop.repositories.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +26,9 @@ public class VoteService {
 
     @Autowired
     private UserIntegrationService userIntegrationService;
+
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
 
 
@@ -72,6 +77,18 @@ public class VoteService {
         String result = (affirmativeVotes > negativeVotes) ? "Passed" : "Failed";
 
         return new VotingResultDTO(totalVotes, affirmativeVotes, negativeVotes, result);
+    }
+
+    @Scheduled(fixedRate = 60000)  // Every minute
+    public void checkSessions() {
+        List<Session> endedSessions = sessionRepository.findByEndTimeBeforeAndMessageSentFalse(LocalDateTime.now());
+        for (Session session : endedSessions) {
+
+            kafkaTemplate.send("voting-session-result", session.getId().toString(), getSessionResults(session.getId()));
+
+            session.setMessageSent(true);
+            sessionRepository.save(session);
+        }
     }
 
 
