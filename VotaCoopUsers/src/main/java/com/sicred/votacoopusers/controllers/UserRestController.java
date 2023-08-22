@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -41,13 +42,15 @@ public class UserRestController {
 
     private void loadCpfs() {
         try {
-            String content = new String(Files.readAllBytes(new ClassPathResource("static/users.json").getFile().toPath()));
-            JSONArray jsonArray = new JSONArray(content);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                validCpfs.add(jsonArray.getJSONObject(i).getString("cpf"));
+            List<String> lines = Files.readAllLines(new ClassPathResource("static/users.csv").getFile().toPath());
+
+            // Skip the header
+            for (int i = 1; i < lines.size(); i++) {
+                String line = lines.get(i);
+                validCpfs.add(line);
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load CPFs from users.json", e);
+            throw new RuntimeException("Failed to load CPFs from users.csv", e);
         }
     }
 }
