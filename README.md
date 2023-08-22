@@ -36,15 +36,16 @@ docker-compose up -d
 ```
 
 ### Documentação da API
-TODO - Adicionar swagger na aplicação e adicionar link aqui
+### Versão 1 da API
+A seguir estão os serviços oferecidos pela versão 1 da API.
 #### Controller de Tópicos (TopicController)
 - **Criar Pauta**:
-    - **Endpoint**:/topics
+    - **Endpoint**:/api/v1/topics
     - **Método**: POST
     - **Descrição**: Cria uma nova pauta.
     - **Curl**:
       ```shell
-      curl --request POST --url http://localhost:8080/topics \
+      curl --request POST --url http://localhost:8080/api/v1/topics \
       --header 'Content-Type: application/json' \
       --data '{
         "title":"Second Topic",
@@ -52,39 +53,91 @@ TODO - Adicionar swagger na aplicação e adicionar link aqui
       }'
       ```
 - **Iniciar Sessão para Pauta**:
-    - **Endpoint**: /topics/{topicId}/startSession
+    - **Endpoint**: /api/v1/topics/{topicId}/startSession
     - **Método**: POST
     - **Descrição**: Inicia uma nova sessão de votação para uma pauta específica. A duração da sessão é opcional e pode ser fornecida.
     - **Curl**:
         ```shell
-        curl --request POST --url http://localhost:8080/topics/1/startSession \
+        curl --request POST --url http://localhost:8080/api/v1/topics/1/startSession \
         --header 'Content-Type: application/json' \
         --data '{
           "duration": 300
         }'
         ```
 - **Obter Todas as Pautas**:
-    - **Endpoint**: /topics
+    - **Endpoint**: /api/v1/topics
     - **Método**: GET
     - **Descrição**: Retorna uma lista de todas as pautas.
     - **Curl**:
         ```shell
-        curl --request GET --url http://localhost:8080/topics
+        curl --request GET --url http://localhost:8080/api/v1/topics
         ```
 #### Controller de Votos (VoteController)
 - **Votar em uma Sessão**:
-    - **Endpoint**: /votes/sessions/{sessionId}/vote
+    - **Endpoint**: /api/v1/votes/sessions/{sessionId}/vote
     - **Método**: POST
     - **Descrição**: Permite que um membro vote em uma sessão específica.
     - **Curl**:
         ```shell
-        curl --request POST  --url http://localhost:8080/votes/sessions/1/vote \
+        curl --request POST  --url http://localhost:8080/api/v1/votes/sessions/1/vote \
         --header 'Content-Type: application/json' \
         --data '{
           "memberCpf":"88487711499",
           "voteValue": true
         }'
         ```
+### Versão 2 da API
+
+A seguir estão os serviços oferecidos pela versão 2 da API.
+
+#### Controller de Tópicos (TopicController)
+
+- **Obter todas as Pautas sem informações de sessões**:
+  - **Endpoint**: /api/v2/topics
+  - **Método**: GET
+  - **Descrição**: Retorna uma lista de todas as pautas.
+  - **Curl**:
+    ```shell
+    curl --request GET --url http://localhost:8080/api/v2/topics
+    ```
+
+- **Obter tópico com informação de sessões**:
+  - **Endpoint**: /api/v2/{topicId}/sessions
+  - **Método**: GET
+  - **Descrição**: Retorna um tópico específico juntamente com suas informações de sessão.
+  - **Curl**:
+    ```shell
+    curl --request GET --url http://localhost:8080/api/v2/1/sessions
+    ```
+
+- **Criar pauta**:
+  - **Endpoint**:/api/v2/topics
+  - **Método**: POST
+  - **Descrição**: Cria uma nova pauta.
+  - **Curl**:
+    ```shell
+    curl --request POST --url http://localhost:8080/api/v2/topics \
+    --header 'Content-Type: application/json' \
+    --data '{
+      "title":"Topic",
+      "description":"Topic Description"
+    }'
+    ```
+
+- **Iniciar sessão para pauta**:
+  - **Endpoint**: /api/v2/topics/{topicId}/startSession
+  - **Método**: POST
+  - **Descrição**: Inicia uma nova sessão de votação para uma pauta específica. A duração da sessão é opcional e pode ser fornecida.
+  - **Curl**:
+    ```shell
+    curl --request POST --url http://localhost:8080/api/v2/topics/1/startSession \
+    --header 'Content-Type: application/json' \
+    --data '{
+      "duration": 300
+    }'
+    ```
+
+---
 
 ### Performance (Jmeter)
 Com base nos testes realizados com o Jmeter (Ambiente local), a aplicação consegue suportar aproximadamente 2144 requisições por segundo. O teste foi realizado com 1000 usuários simultâneos e processou um total de 1.000.001 requisições. O tempo de resposta médio foi de 462 ms, e a mediana do tempo de resposta foi de 435 ms. Adicionalmente, 90% das solicitações foram atendidas em 544 ms ou menos, enquanto que 95% das solicitações foram atendidas em menos de 586 ms e 99% em menos de 673 ms. O tempo de resposta variou entre 1 ms e 1506 ms.
@@ -103,6 +156,6 @@ Agora é necessário entender se esse tempo de resposta é aceitável para o neg
 - [X] Tarefa Bônus 1 - Integração com sistemas externos
 - [X] Tarefa Bônus 2 - Mensageria e filas (Kafka)
 - [X] Tarefa Bônus 3 - Performance (Jmeter)
-- [ ] Tarefa Bônus 4 - Versionamento da API
+- [X] Tarefa Bônus 4 - Versionamento da API
 - [ ] Adicionar Testes
 - [ ] Adicionar Swagger
