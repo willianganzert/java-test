@@ -86,10 +86,23 @@ TODO - Adicionar swagger na aplicação e adicionar link aqui
         }'
         ```
 
+### Performance (Jmeter)
+Com base nos testes realizados com o Jmeter (Ambiente local), a aplicação consegue suportar aproximadamente 2144 requisições por segundo. O teste foi realizado com 1000 usuários simultâneos e processou um total de 1.000.001 requisições. O tempo de resposta médio foi de 462 ms, e a mediana do tempo de resposta foi de 435 ms. Adicionalmente, 90% das solicitações foram atendidas em 544 ms ou menos, enquanto que 95% das solicitações foram atendidas em menos de 586 ms e 99% em menos de 673 ms. O tempo de resposta variou entre 1 ms e 1506 ms.
+
+É essencial destacar que o teste apresentou uma taxa de erro de 54,51%. Os erros são esperados, visto que os CPFs com final par utilizados nos testes não são válidos.
+
+Agora é necessário entender se esse tempo de resposta é aceitável para o negócio. Caso não seja, é imperativo realizar uma análise mais aprofundada para identificar possíveis gargalos da aplicação e buscar estratégias de otimização.
+
+##### O teste foi realizado bem como os artefatos produzidos se encontram nos links abaixo: 
+- [Jmeter Test Plan](https://raw.githubusercontent.com/willianganzert/java-test/main/Voting_Load_Test.jmx)
+- [Jmeter Test Results](https://raw.githubusercontent.com/willianganzert/java-test/main/Voting_Load_Test_Results.7z)
+- [Jmeter HTML Report](https://raw.githubusercontent.com/willianganzert/java-test/main/html_report.7z)
+
+
 ### TODO
 - [X] Tarefa Bônus 1 - Integração com sistemas externos
 - [X] Tarefa Bônus 2 - Mensageria e filas (Kafka)
-- [ ] Tarefa Bônus 3 - Performance (Jmeter)
+- [X] Tarefa Bônus 3 - Performance (Jmeter)
 - [ ] Tarefa Bônus 4 - Versionamento da API
 - [ ] Adicionar Testes
 - [ ] Adicionar Swagger

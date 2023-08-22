@@ -36,12 +36,12 @@ public class TopicService {
         session.setTopic(topic);
 
         // Set the session's start time to now
-        session.setStartTime(LocalDateTime.now().plusSeconds(1));
+        session.setStartTime(LocalDateTime.now());
 
         // If the duration is provided, set the end time accordingly. Else, default it to 60 seconds.
         int actualDuration = durationInSeconds.orElse(60); // Default to 60 seconds
         session.setDuration(actualDuration);
-        session.setEndTime(LocalDateTime.now().plusSeconds(1).plusSeconds(actualDuration)); // Convert to milliseconds
+        session.setEndTime(LocalDateTime.now().plusSeconds(actualDuration)); // Convert to milliseconds
 
         return sessionRepository.save(session);
     }

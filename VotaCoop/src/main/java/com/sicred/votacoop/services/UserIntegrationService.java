@@ -28,12 +28,13 @@ public class UserIntegrationService {
             if(response.getStatusCode() == HttpStatus.OK) {
                 return (String) Objects.requireNonNull(response.getBody()).get("status");
             }
-            // Handle other statuses if necessary
+
+            throw new BusinessException("Error retrieving voting status from the user service.", HttpStatus.BAD_GATEWAY);
+
         } catch (HttpClientErrorException.NotFound e) {
-            throw new BusinessException("CPF is invalid.");
+            throw new BusinessException("CPF is invalid.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            throw new BusinessException("Error connecting to the user service. Try again later.");
+            throw new BusinessException("Error connecting to the user service. Try again later.", HttpStatus.SERVICE_UNAVAILABLE);
         }
-        return null;
     }
 }
