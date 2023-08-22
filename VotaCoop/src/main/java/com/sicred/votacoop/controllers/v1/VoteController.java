@@ -1,4 +1,4 @@
-package com.sicred.votacoop.controllers;
+package com.sicred.votacoop.controllers.v1;
 
 import com.sicred.votacoop.dtos.VotingResultDTO;
 import com.sicred.votacoop.models.Vote;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/votes")
+@RequestMapping("/api/v1/votes")
 public class VoteController {
 
     @Autowired
