@@ -1,5 +1,6 @@
 package com.sicred.votacoop.services;
 
+import com.sicred.votacoop.dtos.TopicView;
 import com.sicred.votacoop.exceptions.ResourceNotFoundException;
 import com.sicred.votacoop.models.Session;
 import com.sicred.votacoop.models.Topic;
@@ -46,8 +47,17 @@ public class TopicService {
         return sessionRepository.save(session);
     }
 
+    public Topic getTopicById(Long topicId) {
+        return topicRepository.findById(topicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Topic not found"));
+    }
+
     // Get all topics
     public List<Topic> getAllTopics() {
         return topicRepository.findAll();
+    }
+
+    public List<TopicView> getAllTopicsOnly() {
+        return topicRepository.findBy();
     }
 }

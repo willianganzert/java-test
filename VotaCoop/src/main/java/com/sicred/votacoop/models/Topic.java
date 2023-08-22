@@ -1,9 +1,12 @@
 package com.sicred.votacoop.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 @Entity
 @Table(name = "topic")
@@ -21,6 +24,10 @@ public class Topic {
     @Column(length = 1000)
     @Size(max = 1000, message = "Description can be up to 1000 characters long.")
     private String description;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Session> sessions;
 
     public Topic() {
     }
@@ -56,5 +63,13 @@ public class Topic {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Session> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(List<Session> sessions) {
+        this.sessions = sessions;
     }
 }
