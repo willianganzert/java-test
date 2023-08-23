@@ -25,6 +25,15 @@ cd java-test
 ```shell
 docker-compose up -d
 ```
+#### Rodar testes unitários com Gradle:
+```shell
+./gradlew test
+```
+#### Gerar relatório de cobertura de código e validar cobertura mínima de 80% com Gradle:
+```shell
+./gradlew jacocoTestReport jacocoTestCoverageVerification
+```
+
 #### Construa o projeto com Gradle:
 ```shell
 ./gradlew build
