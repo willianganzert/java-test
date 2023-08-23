@@ -166,5 +166,5 @@ Agora é necessário entender se esse tempo de resposta é aceitável para o neg
 - [X] Tarefa Bônus 2 - Mensageria e filas (Kafka)
 - [X] Tarefa Bônus 3 - Performance (Jmeter)
 - [X] Tarefa Bônus 4 - Versionamento da API
-- [ ] Adicionar Testes
-- [ ] Adicionar Swagger
+- [X] Adicionar Testes
+- [ ] ~~Adicionar Swagger~~
