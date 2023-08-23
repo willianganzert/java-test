@@ -17,8 +17,8 @@ public class Topic {
     private Long id;
 
     @Column(nullable = false, length = 255) // Providing column details can be helpful.
-    @NotNull(message = "Topic name cannot be null.")
-    @Size(min = 1, max = 255, message = "Topic name must be between 1 and 255 characters.")
+    @NotNull(message = "Topic title cannot be null.")
+    @Size(min = 1, max = 255, message = "Topic title must be between 1 and 255 characters.")
     private String title;
 
     @Column(length = 1000)

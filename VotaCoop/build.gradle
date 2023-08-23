@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.2'
     id 'io.spring.dependency-management' version '1.1.2'
+    id 'jacoco'
 }
 
 group = 'com.sicred'
@@ -23,8 +24,55 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka:3.0.9'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.12.4'
+    
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Jacoco
+jacoco {
+    toolVersion = "0.8.7"
+}
+// Jacoco - Test Coverage Report Configuration
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude:
+                    [
+                            'com/sicred/votacoop/config/**',
+                            'com/sicred/votacoop/dtos/**',
+                            'com/sicred/votacoop/models/**'
+                    ])
+        }))
+    }
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+    }
+}
+// Jacoco - Test Coverage Verification Configuration
+jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude:
+                    [
+                            'com/sicred/votacoop/config/**',
+                            'com/sicred/votacoop/dtos/**',
+                            'com/sicred/votacoop/models/**'
+                    ])
+        }))
+    }
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8
+            }
+        }
+    }
 }
